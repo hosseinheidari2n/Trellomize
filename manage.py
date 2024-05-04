@@ -6,12 +6,12 @@ class Client:
     def __init__(self, userName, password):
         self.UserName = userName
         self.Password = password
-
+#-----------------------------------
 class Manager:
     def __init__(self, userName, password):
         self.UserName = userName
         self.Password = password
-
+#-----------------------------------
 def FirstCommandList():
     print("Hello, Welcome to our Project Management.")
     print("1. Create Manager")
@@ -25,13 +25,14 @@ def FirstCommandList():
     elif n == "2":
         LoginManager()
     elif n == "3":
-        CreateClient()
+        create_client()
     elif n == "4":
         LoginClient()
     else:
         print("Please enter a number between 1 to 4...")
         FirstCommandList()
 
+#-------------------------------
 def CreateManager():
     filePath = "manager.txt"
 
@@ -55,7 +56,7 @@ def CreateManager():
         print("Saved in manager.txt")
         input("Press any enter...")
         FirstCommandList()
-
+#-------------------------------------------------------
 def LoginManager():
     filePath = "manager.txt"
 
@@ -82,24 +83,57 @@ def LoginManager():
             LoginManager()
     else:
         print("First Create Manager!")
-
-def CreateClient():
+#---------------------------------------------------------
+def create_client():
     print("Please enter your userName...")
-    userName = input()
+    input_username = input()
     print("Please enter your password...")
     password1 = input()
-    password = HashPassword(password1)
+    input_password = HashPassword(password1)
 
-    client = Client(userName, password)
+    file_path = "client.txt"
 
-    content = f"{client.UserName} : {client.Password}\n"
+    if os.path.exists(file_path):
+        with open(file_path, "r") as file:
+            lines = file.readlines()
 
-    with open("client.txt", "a") as file:
-        file.write(content)
+        found = False
 
-    print("Saved in client.txt")
-    input("Press any enter...")
-    FirstCommandList()
+        for line in lines:
+            part = line.split(':')
+            if len(part) == 2 and part[0].strip() == input_username:
+                found = True
+                break
+
+        if not found:
+            # Username not found, so add it
+            client = Client(input_username, input_password)
+
+            content = f"{client.UserName} : {client.Password}\n"
+
+            with open(file_path, "a") as file:
+                file.write(content)
+
+            print("Saved in client.txt")
+        else:
+            # Username already exists
+            print("This username exists. Please enter another username.")
+            create_client() # Call the function again to get a new username
+
+        print("Press enter to continue...")
+        input()
+        FirstCommandList()
+    else:
+        client = Client(input_username, input_password)
+        content = f"{client.UserName} : {client.Password}\n"
+        with open(file_path, "a") as file:
+            file.write(content)
+        print("Saved in client.txt")
+        print("Press enter to continue...")
+        input()
+        FirstCommandList()
+
+#------------------------------------------------------------
 
 def LoginClient():
     filePath = "client.txt"
@@ -128,16 +162,16 @@ def LoginClient():
     else:
         print("UserName or Password is not correct")
         LoginClient()
-
+#--------------------------------------------------------------
 def HashPassword(password):
     passwordBytes = password.encode('utf-8')
     hashBytes = hashlib.sha256(passwordBytes).digest()
     return hashBytes.hex()
-
+#----------------------------------------------------------------
 def CalculateHash(input):
     hashBytes = hashlib.sha256(input.encode('utf-8')).digest()
     return hashBytes.hex()
-
+#----------------------------------------------------------------
 def SecondCommandList():
     print("1. Create Project")
     print("2. Show Projects")
