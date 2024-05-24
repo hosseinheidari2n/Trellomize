@@ -1,0 +1,39 @@
+what about the interface?
+scrolling through an update, a panel on the right that toggles between notes, comments and off, and the date annd craetor are on a panel above the update. 
+there's always an address type of thing on top left that shows you the directory you're at, also the person you're logged in as.
+it's all about ideas
+spend more time on these, you'll find so much new stuff.
+for logging, honestly idk.
+
+for tracking progression, there's both a meter and a tasks done to all tasks ratio. 
+task assignment? adding users? argparse?
+users should be defined in project, not something like github.
+user id and name being saved is fine. actually just id, you can get the other stuff from that.
+
+there's also maybe a panic mode if due date is short. a smart system that hides exra features if there's much to do still, etc. this can maybe be turned off too.
+have a demo project that is a reference to how they didn't give you full mark.
+
+how about contributions? progress? permissions?
+
+how to get input for things like names for the project?
+
+a lot of quick shortcuts to do things, most terminal related. a command system type of thing.
+today's commit goal:
+•deserializing & serializing
+
+future commit goals:
+•user interface for modifying and manouvering projects, logs, 
+•a deadline and progression tracking system
+•permissions, promotions and such
+•cleanups, testing, bugfixing, sweeteners
+
+todo:
+the unit tests,
+ui, 
+ranking/promoting system, 
+progression tracking and deadlines, 
+logging, 
+
+
+~~other notes~~
+add feature, tbi and stub to pretty comments

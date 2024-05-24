@@ -2,14 +2,18 @@ import datetime
 import hashlib
 import os
 import uuid
+import random
 from enum import Enum
 
 
 class User:
-    def __init__(self, username, password):
+    def __init__(self, username, password, id = None):
         self.UserName = username
         self.Password = password
-        
+        if id == None:
+            self.ID = uuid.uuid1()
+        else:
+            seld.ID = id
 class Client:
     def __init__(self, userName, password):
         self.UserName = userName
