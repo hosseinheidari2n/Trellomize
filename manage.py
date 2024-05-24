@@ -183,3 +183,6 @@ def CalculateHash(input):
 def SecondCommandList():
     print("1. Create Project")
     print("2. Show Projects")
+
+if __name__ == "__main__":
+    FirstCommandList()
