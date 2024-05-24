@@ -33,7 +33,7 @@ def FirstCommandList():
     elif n == "2":
         LoginManager()
     elif n == "3":
-        create_client()
+        CreateClient()
     elif n == "4":
         LoginClient()
     else:
@@ -92,7 +92,7 @@ def LoginManager():
     else:
         print("First Create Manager!")
 #---------------------------------------------------------
-def create_client():
+def CreateClient():
     print("Please enter your userName...")
     input_username = input()
     print("Please enter your password...")
@@ -126,7 +126,7 @@ def create_client():
         else:
             # Username already exists
             print("This username exists. Please enter another username.")
-            create_client() # Call the function again to get a new username
+            CreateClient() # Call the function again to get a new username
 
         print("Press enter to continue...")
         input()
