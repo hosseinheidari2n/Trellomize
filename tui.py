@@ -3,6 +3,7 @@ import terminaltools
 import tempfile
 import os
 import re
+from time import sleep
 
 class Menu:
     def __init__(self, stdscr, options):
@@ -34,6 +35,7 @@ class Menu:
             option = option.lower()
             if re.match(f".*{self.typed_str}.*", option):
                 self.valid_options.append((index, option))
+        self.valid_index = 0        
     def run(self):
         while True:
             key = self.stdscr.getch()
@@ -44,10 +46,11 @@ class Menu:
             elif key in (curses.KEY_ENTER, 10) :
                 self.stdscr.clear()
                 self.stdscr.refresh()
-                return self.next_menu
+                return self.current_index
             elif key in (9, ):
-                self.valid_index = (self.valid_index + 1)%len(self.valid_options)
-                self.current_index = self.valid_options[self.valid_index][0]
+                if len(self.valid_options):
+                    self.valid_index = (self.valid_index + 1)%len(self.valid_options)
+                    self.current_index = self.valid_options[self.valid_index][0]
             else:
                 #incomplete
                     #notes on completion: maybe a typing state it goes to, which can be exited when you know?
@@ -55,23 +58,28 @@ class Menu:
                 #you can also start typing out an option to point the cursor to it.
                 self.typed_str = self.typed_str + chr(key)
                 self.check_valid_options()
+                
                 #here maybe add a feature where pressing tab lets you cycle through valid optoins.   
-                      
                 if len(self.valid_options) == 0:
                     self.typed_str = '' + chr(key)
                     self.check_valid_options()
-                    self.current_index = self.valid_options[self.valid_index][0] 
+                    if len(self.valid_options) != 0:
+                        self.current_index = self.valid_options[self.valid_index][0] 
                 else:
                     self.current_index = self.valid_options[self.valid_index][0]    
             self.display_options()
 
+def take_input(stdscr):
+    stdscr.clear()
+    stdscr.addstr(0, 0, 'enter text: \n')
+    stdscr.refresh()
+    sleep(2)
 def main(stdscr):
     curses.curs_set(0)
     main_menu_options = ['Create manager', 'Login as manager', 'delete manager', 'Create user', 'Login as user']
     main_menu = Menu(stdscr, main_menu_options)
     current_menu = main_menu
 
-    while current_menu:
-        current_menu = current_menu.run()
-
+    print(current_menu.run())
+    take_input(stdscr)
 curses.wrapper(main)

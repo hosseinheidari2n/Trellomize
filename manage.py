@@ -5,7 +5,6 @@ import uuid
 import random
 from enum import Enum
 
-
 class User:
     def __init__(self, username, password, id = None):
         self.UserName = username
@@ -13,7 +12,7 @@ class User:
         if id == None:
             self.ID = uuid.uuid1()
         else:
-            seld.ID = id
+            self.ID = id
 class Client:
     def __init__(self, userName, password):
         self.UserName = userName
