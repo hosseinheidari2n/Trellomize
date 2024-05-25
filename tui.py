@@ -1,5 +1,5 @@
 import curses
-import terminaltools
+
 import tempfile
 import os
 import re

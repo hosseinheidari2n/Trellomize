@@ -80,8 +80,8 @@ class Project:
         self.Name:str = name
         self.Date = date
         self.Id:int = id
-        self.Members:list(tuple(manage.Client, rank)) = members
-        self.Tasks:list(Task) = tasks #the ID will be the index in this list
+        self.Members:list(tuple(manage.Client, rank)) = members # type: ignore
+        self.Tasks:list(Task) = tasks # type: ignore #the ID will be the index in this list
     def AddMembers(self, rank=rank.guest, *members):
         for p in members:
             self.Members.append(p.UserName, rank)
