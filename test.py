@@ -1,8 +1,8 @@
-# import curses
+import curses
 # import manage
 # import os
 # import tempfile
-# from curses import wrapper
+from curses import wrapper
 # import re
 import json
 import unittest
@@ -85,4 +85,7 @@ class TestDeserializing(unittest.TestCase):
     
 # main()
 
-# #tab is 9 enter is 10
+def main(stdscr):
+    print(stdscr.getch())
+wrapper(main)
+# #tab is 9 enter is 10 backspace is 8 delete is 462

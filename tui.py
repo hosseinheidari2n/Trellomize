@@ -1,9 +1,38 @@
 import curses
+import curses.textpad as textpad
 import terminaltools
 import tempfile
 import os
 import re
+import datetime
 from time import sleep
+
+class RestrictedTextbox(textpad.Textbox):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.win.border()
+        self.thingtypeded = [] # for debug
+        
+    def do_command(self, char):
+        '''checks if an action involves stepping outside of the confines of the dedicated box, allows it otherwise.'''
+        y, x = self.win.getyx()[0] + 1, self.win.getyx()[1] + 1
+        if char in (263,):
+            if x == 2:
+                if y == 2:
+                    return True
+                self.win.move(y - 2, self.maxx)   
+            self.win.addstr('\b \b')
+            return True
+        else:
+            if x in (self.maxx + 1,):
+                if y == self.maxy:
+                    return True
+                self.win.move(y, 1)
+        return super().do_command(char)
+    
+    def getthingtypeded(self):
+        return self.thingtypeded
+            
 
 class Menu:
     def __init__(self, stdscr, options):
@@ -15,7 +44,7 @@ class Menu:
         self.valid_options = []
         self.valid_index = 0
 
-    #prints options, with reversed (white background, black text) colors if chosen.    
+    # prompts an interface to terminal for choosing an option from a list    
     def display_options(self):
         self.stdscr.clear()
         for index, option in enumerate(self.options):
@@ -69,17 +98,36 @@ class Menu:
                     self.current_index = self.valid_options[self.valid_index][0]    
             self.display_options()
 
-def take_input(stdscr):
-    stdscr.clear()
-    stdscr.addstr(0, 0, 'enter text: \n')
-    stdscr.refresh()
-    sleep(2)
-def main(stdscr):
-    curses.curs_set(0)
-    main_menu_options = ['Create manager', 'Login as manager', 'delete manager', 'Create user', 'Login as user']
-    main_menu = Menu(stdscr, main_menu_options)
-    current_menu = main_menu
+#incomplete
+def take_input(stdscr, y = None, x = None, height = None, width = None, clear = False):
+    if clear: 
+        stdscr.clear()
+    text_win = curses.newwin(y, x, height, width)
+    text_win.move(1, 1)
+    box = RestrictedTextbox(text_win, False)
+    box.edit()
+    print(box.getthingtypeded())
+    sleep(10)
+    return box.gather()
 
-    print(current_menu.run())
-    take_input(stdscr)
+#incomplete
+def take_update(stdscr, user, date = str(datetime.datetime.now().date()) + ' ' +  str(datetime.datetime.now().time()).split(sep='.')[0]):
+    stdscr.clear()
+    maxx, maxy = stdscr.getmaxyx()
+    stdscr.addstr(1, maxx//8, str(date), curses.color_pair(1))
+    take_input(stdscr, 10, 10, 10, 10)
+    stdscr.refresh()
+    sleep(5)
+    
+    
+#for testing purposes
+def main(stdscr):
+    curses.start_color()
+    curses.init_pair(1, 243, curses.COLOR_BLACK)
+    curses.curs_set(0)
+    # main_menu_options = ['Create manager', 'Login as manager', 'delete manager', 'Create user', 'Login as user']
+    # main_menu = Menu(stdscr, main_menu_options)
+    # current_menu = main_menu
+    # print(current_menu.run())
+    take_update(stdscr, None)
 curses.wrapper(main)

@@ -31,9 +31,34 @@ todo:
 the unit tests,
 ui, 
 ranking/promoting system, 
-progression tracking and deadlines, 
+-> progression tracking, deadlines and task assignment, 
 logging, 
 
+
+each task should keep track of it's contributers, being assigned to a task and requesting the leader of the task to contribute are ways that do that.
+each project has a deadline, progression bar that is determined by the leaders of tasks (each task has it's own progression bar, and there's a total progression bar too that is made of colored segments)
+for this:
+    tasks should have a completion field, people contributing, and a color code. 
+    task history
+
+things to do: 
+    make appropriate modification to tasks (contributers and contribution type, color code (gotten from id) and bar)
+    editting task interface (priority, changing state, promoting, 
+    requesting to contribute method (requests the leader of a task)
+    permissions to modify
+    promotions
+    logs & a good way to view them
+    
+more briefing, renoting
+
+re-evaluation:
+    task creation interface
+    viewing members & member management for the leader
+    making comments & notes
+    permission management
+
+
+commands for management
 
 ~~other notes~~
 add feature, tbi and stub to pretty comments
