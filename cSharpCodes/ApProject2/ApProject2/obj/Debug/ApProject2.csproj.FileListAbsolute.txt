@@ -1,0 +1,7 @@
+C:\Users\pc\source\repos\ApProject2\ApProject2\obj\Debug\ApProject2.csprojAssemblyReference.cache
+C:\Users\pc\source\repos\ApProject2\ApProject2\obj\Debug\ApProject2.csproj.CoreCompileInputs.cache
+C:\Users\pc\source\repos\ApProject2\ApProject2\bin\Debug\ApProject2.exe.config
+C:\Users\pc\source\repos\ApProject2\ApProject2\bin\Debug\ApProject2.exe
+C:\Users\pc\source\repos\ApProject2\ApProject2\bin\Debug\ApProject2.pdb
+C:\Users\pc\source\repos\ApProject2\ApProject2\obj\Debug\ApProject2.exe
+C:\Users\pc\source\repos\ApProject2\ApProject2\obj\Debug\ApProject2.pdb
