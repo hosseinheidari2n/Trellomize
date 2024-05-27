@@ -62,24 +62,30 @@ class rank(Enum):
     admin = 3
     owner = 4
 
+class states(Enum):
+    BACKLOG = 0
+    TODO = 1
+    DOING = 2
+    DONE = 3
+    ARCHIVED = 4
+    
+class priorities(Enum):
+    LOW = 0
+    MEDIUM = 1
+    HIGH = 2
+    CRITICAL = 3
+
 rank_requirements = {
     #not final. may implement tuples, for default requirements instaed.
     'addprojectmembers': 3
     #...
 }
 
-
-def deserialize_Update(dict1):
-    pass
-def deserialize_Task(dict1):
-    pass
-def deserialize_project(dict1):
-    pass
 class Project:
-    def __init__(self, name:str, date, id:int, members = [], tasks = []):
+    def __init__(self, name:str, date, creator_id:int, members = [], tasks = []):
         self.Name:str = name
         self.Date = date
-        self.Id:int = id
+        self.CreatorID:int = creator_id
         self.Members:list(tuple(manage.Client, rank)) = members
         self.Tasks:list(Task) = tasks #the ID will be the index in this list
     def AddMembers(self, rank=rank.guest, *members):
@@ -92,7 +98,7 @@ class Project:
         return json.dumps(self, default=lambda obj: obj.__dict__,  sort_keys=True, indent = 4)
     def save_project(self, path=None):
         if path == None:
-            path = f"{self.Name}.json"
+            path = f"projects/{creator_id}/{self.Name}.json"
         with open(path, 'w') as file:
             json.dump(self, file, default=lambda obj: obj.__dict__, sort_keys=True, indent = 4)
     def AddTask(self, t):
@@ -113,9 +119,14 @@ class Project:
 
 class Task:
     #add feature: add deadline and progress
-    def __init__(self, name, date, task_priority = 0, updates = []):
+    def __init__(self, name, date, id, desc, due_date = None, member_config = [], task_priority = 0, updates = [], state = 0):
         self.Name = name
         self.Date = date
+        self.State = state
+        seld.DueDate = due_date
+        self.ID = id
+        self.Desc = desc
+        self.Member_Perms = member_config
         self.TaskPriority = task_priority
         self.Updates = updates
 
@@ -135,24 +146,12 @@ class Update:
         self.Notes = notes
         self.Comments = comments
 
-
-    #add feature: editors for making text files (notes, comments, updates)
-    def write_update_stdscr(self, user):
-        pass
-    def write_update_vim(self, user):
-        pass
-
 class Comment:
     def __init__(self, title, date, creator_id, content):
         self.Title = title
         self.Date = date
         self.CreatorID = creator_id
-        self.Content = content
-    
-#TBI
-def actIfPerm():
-    pass
-            
+        self.Content = content  
 
 #for quick testing
 def main():

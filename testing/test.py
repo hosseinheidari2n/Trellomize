@@ -3,11 +3,10 @@ import curses
 # import os
 # import tempfile
 from curses import wrapper
+from curses.textpad import Textbox, rectangle
 # import re
 import json
 import unittest
-import project
-import json_formatting
 
 class TestDeserializing(unittest.TestCase):
     def test_comment_deserialization(self):
@@ -86,6 +85,15 @@ class TestDeserializing(unittest.TestCase):
 # main()
 
 def main(stdscr):
-    print(stdscr.getch())
+    # win = curses.newwin(2, 17, 3, 3)
+    # stdscr.addstr(0, 0, 'hello')
+    # box = Textbox(win)
+    # rectangle(stdscr, 2, 2, 5, 20)
+    # stdscr.refresh()
+    # box.edit()
+    # stdscr.getch()
+    with open('testing/mich .json', 'r') as file:
+        a = json.load(file)
+    print(a)
 wrapper(main)
 # #tab is 9 enter is 10 backspace is 8 delete is 462
