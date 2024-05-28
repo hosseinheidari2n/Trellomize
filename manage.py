@@ -27,7 +27,7 @@ def FirstCommandList():
     print("Hello, Welcome to our Project Management.")
     print("1. Create Manager")
     print("2. Login as Manager")
-    print("3. Sign In as Client")
+    print("3. Sign Up as Client")
     print("4. Login as Client")
     print("Please enter a number between 1 to 4...")
     n = input()
@@ -186,6 +186,15 @@ def CalculateHash(input):
 def SecondCommandList():
     print("1. Create Project")
     print("2. Show Projects")
+    print("Please enter a number between 1 to 2...")
+    n = input()
+    if n == "1":
+        print("ddd")
+    elif n == "2":
+        print("there is no project")
+    else:
+        print("Please enter a number between 1 to 2...")
+        SecondCommandList()
 
 if __name__ == "__main__":
     FirstCommandList()
