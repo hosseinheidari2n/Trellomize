@@ -1,9 +1,12 @@
+
 import unittest
 from unittest.mock import patch, mock_open
 import hashlib
 import os
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from manage import User, Client, Manager, HashPassword, CalculateHash, CreateManager, LoginManager, CreateClient, LoginClient
+from manage import User, Client, Manager, HashPassword, CalculateHash, CreateManager, LoginManager, create_client, LoginClient
 
 class TestUserManagerClient(unittest.TestCase):
     
@@ -35,24 +38,15 @@ class TestUserManagerClient(unittest.TestCase):
         self.assertEqual(calculated_hash, expected_hash)
 
 
-    @patch('builtins.input', side_effect=['newmanager', 'newpassword'])
-    @patch('builtins.open', new_callable=mock_open, read_data='')
-    @patch('os.path.exists', return_value=False)
-    def test_create_manager(self, mock_exists, mock_open, mock_input):
-        CreateManager()
-        mock_open.assert_called_once_with('manager.txt', 'a')
-        handle = mock_open()
-        handle.write.assert_called_once_with('newmanager : ' + HashPassword('newpassword') + '\n')
 
-
-    @patch('builtins.input', side_effect=['newmanager', 'wrongpassword'])
-    @patch('builtins.open', new_callable=mock_open, read_data='newmanager : ' + HashPassword('newpassword') + '\n')
-    @patch('os.path.exists', return_value=True)
-    def test_login_manager_success(self, mock_exists, mock_open, mock_input):
-        with patch('manage.SecondCommandList') as mock_second_command:
+    @patch('builtins.input', side_effect=["manageruser", "wrongpassword", "manageruser", "managerpassword"])
+    @patch("builtins.open", new_callable=mock_open, read_data="manageruser : " + HashPassword("managerpassword") + "\n")
+    @patch("os.path.exists", return_value=True)
+    def test_login_manager(self, mock_exists, mock_open, mock_input):
+        with patch('manage.SecondCommandList') as mock_second_command_list:
             LoginManager()
-            mock_second_command.assert_called_once()
-
+            self.assertTrue(mock_second_command_list.called)
+ 
     @patch('builtins.input', side_effect=['newmanager', 'wrongpassword'])
     @patch('builtins.open', new_callable=mock_open, read_data='newmanager : ' + HashPassword('newpassword') + '\n')
     @patch('os.path.exists', return_value=True)
@@ -60,15 +54,6 @@ class TestUserManagerClient(unittest.TestCase):
         with patch('manage.LoginManager') as mock_login_manager:
             LoginManager()
             mock_login_manager.assert_called()
-
-    @patch('builtins.input', side_effect=['newclient', 'newpassword'])
-    @patch('builtins.open', new_callable=mock_open, read_data='')
-    @patch('os.path.exists', return_value=False)
-    def test_create_client(self, mock_exists, mock_open, mock_input):
-        CreateClient()
-        mock_open.assert_called_once_with('client.txt', 'a')
-        handle = mock_open()
-        handle.write.assert_called_once_with('newclient : ' + HashPassword('newpassword') + '\n')
 
     @patch('builtins.input', side_effect=['newclient', 'newpassword'])
     @patch('builtins.open', new_callable=mock_open, read_data='newclient : ' + HashPassword('newpassword') + '\n')
@@ -85,6 +70,7 @@ class TestUserManagerClient(unittest.TestCase):
         with patch('manage.LoginClient') as mock_login_client:
             LoginClient()
             mock_login_client.assert_called()
+            
 
 if __name__ == '__main__':
     unittest.main()

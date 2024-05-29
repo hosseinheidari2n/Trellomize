@@ -10,7 +10,7 @@ class User:
         self.UserName = username
         self.Password = password
         if id == None:
-            self.ID = str(uuid.uuid1())
+            self.ID = uuid.uuid1()
         else:
             self.ID = id
 class Client:
@@ -27,7 +27,7 @@ def FirstCommandList():
     print("Hello, Welcome to our Project Management.")
     print("1. Create Manager")
     print("2. Login as Manager")
-    print("3. Sign In as Client")
+    print("3. Sign Up as Client")
     print("4. Login as Client")
     print("Please enter a number between 1 to 4...")
     n = input()
@@ -189,7 +189,7 @@ def SecondCommandList():
     print("Please enter a number between 1 to 2...")
     n = input()
     if n == "1":
-       print("ddd")
+        print("ddd")
     elif n == "2":
         print("there is no project")
     else:
