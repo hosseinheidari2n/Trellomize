@@ -12,7 +12,14 @@ import project
 import manage
 from time import sleep
 
-logfile_a = open('logs/actionlog.txt')
+if not os.path.isfile('logs/actionlog.txt'):
+    try:
+        os.makedirs('logs')
+    except FileExistsError:
+        pass
+    with open('logs/actionlog.txt', 'a') as file:
+        file.close()
+logfile_a = open('logs/actionlog.txt', 'a')
 
 class RestrictedTextbox(textpad.Textbox):
     def __init__(self, *args, **kwargs): ##how to add more kwargs to child classes?
@@ -171,6 +178,7 @@ def view_project_tasks(stdscr, proj, user):
             elif c == ord('d'):
                 stdscr.clear()
                 stdscr.addstr(0, 0, 'Are you sure you want to delete this project? This is an irreversible action. Type "Delete" to confirm.')
+                stdscr.refresh()
                 if input_box(stdscr, 1, 0, 1, 100).lower() == 'delete':
                     os.remove(f'projects/{user.ID}/{proj.Name}.json')
                 break
@@ -208,12 +216,14 @@ def goodnow():
 def take_update(stdscr, user = None, date = goodnow()):
     stdscr.clear()
     stdscr.addstr(0, 0, 'Choose a title for your update', curses.color_pair(1))
+    stdscr.refresh()
     text_box = curses.newwin(1, 25, 2, 10)
     box = textpad.Textbox(text_box)
     stdscr.refresh()
     box.edit()
     title = box.gather()
     stdscr.addstr(4, 0, 'Add a description for your update', curses.color_pair(1))
+    stdscr.refresh()
     text_box = curses.newwin(37, 80, 6, 10)
     stdscr.refresh()
     box = textpad.Textbox(text_box)
@@ -277,6 +287,8 @@ def input_box(stdscr, y, x, height, width):
     return text_box.gather().strip()
 
 def take_task(stdscr, user = None, date = goodnow(), pretitle = None, pretext = '', members = [], preduedate = None, editmode = False, titlemode = False, duedatemode = False, projmembs = []):
+    state = 0
+    priority = 0
     member_assignments = []
     for m in members:
         member_assignments.append(False)
@@ -309,7 +321,7 @@ def take_task(stdscr, user = None, date = goodnow(), pretitle = None, pretext = 
         if duedatemode:
             stdscr.addstr(3, 35, f'Days left:')
             stdscr.refresh()
-            dt = str(input_box(stdscr, 3, 45, 1, 25))
+            dt = int(input_box(stdscr, 3, 45, 1, 25))
             if not str(dt).isnumeric():
                 dt = 1
                 
@@ -326,16 +338,19 @@ def take_task(stdscr, user = None, date = goodnow(), pretitle = None, pretext = 
             text = box.gather()
         else:
             stdscr.addstr(7, 11, text)
-        stdscr.addstr(47, 10, 'S: SAVE | M: CHOOSE MEMBERS | E: EDIT | R: RESET | T: CHANGE TITLE | D: CONFIGURE DUE DATE')
+        stdscr.addstr(47, 10, 'S: SAVE | M: CHOOSE MEMBERS | E: EDIT | R: RESET | T: CHANGE TITLE | D: CONFIGURE DUE DATE | C: CHANGE STATE')
         while True:
             c = stdscr.getch()  
+            if c == ord('c'):
+                stdscr.clear()
+                state = tui.Menu(['BACKLOG', 'TODO', 'DOING', 'DONE', 'ARCHIVED']).run()
             if c == ord('s'):
                 stdscr.clear()
                 stdscr.addstr(0, 0, 'How important is this task? ')
                 stdscr.getch()
                 priority = Menu(stdscr, ['LOW', 'MEDIUM', 'HIGH', 'CRITICAL']).run()
                 member_perms = [members[i] for i in range(len(members)) if member_assignments[i]]
-                return project.Task(title, date, str(uuid.uuid1()), text, duedate, member_perms, priority, 0, [], 0)
+                return project.Task(title, date, str(uuid.uuid1()), text, duedate, member_perms, (priority), [], (state))
             elif c == ord('m'):
                 if projmembs == []:
                     stdscr.addstr(0, 0, 'There are no members in this project.')
@@ -424,6 +439,11 @@ def view_task_admin(stdscr, task, user, proj):
         c = stdscr.getch()
         if c == ord('u'):
             stdscr.clear()
+            if not len(task.Updates):
+                stdscr.clear()
+                stdscr.addstr(0, 0, 'There are no updates on this task.')
+                stdscr.refresh()
+                break
             c2 = Menu(stdscr, [(u.Title.center(94) + ' | ' + str(u.CreatorID) + ' | ' +  str(u.Date)) for u in task.Updates]).run()
             view_update_admin(stdscr, task.Updates[c2], user)
         elif c == ord('m'):

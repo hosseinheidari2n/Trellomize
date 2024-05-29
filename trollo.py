@@ -9,6 +9,13 @@ import json_formatting
 import datetime
 from curses.textpad import *
 
+if not os.path.isfile('logs/userlog.txt'):
+    try:
+        os.makedirs('logs')
+    except FileExistsError:
+        pass
+    with open('logs/userlog.txt', 'w') as file:
+        pass
 LOGPATH_U = 'logs/userlog.txt'
 
 

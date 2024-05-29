@@ -6,9 +6,10 @@ from enum import Enum
 
 
 class User:
-    def __init__(self, username, password):
+    def __init__(self, username, password, id):
         self.UserName = username
         self.Password = password
+        self.ID = id
         
 class Client:
     def __init__(self, userName, password):
