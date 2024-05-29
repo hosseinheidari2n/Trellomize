@@ -1,14 +1,16 @@
 import manage
 import os
 import tempfile
+import datetime
 from enum import Enum
 from typing import List
 import json
+
 # a project consists of an environment to share what you've done (which will be
 # done in statements), make comments, notes, memos etc on other people's statements,
 # tag your statements and color code them and so on. 
 # on each task or statement you can post updates. 
-
+#syncing it with trello?
 #the project manager can assign people to tasks, and people can also declare that they volunteer. Don't worry about the logging for now.
 #you can also start typing out each option to choose it.
 #abstractness rate, a way to mark how big a task is and an easy way to track progress
@@ -27,7 +29,7 @@ import json
 #each update to a task is added in one bullet point. there's also notes for other stuff.
 #there can also be a plans section for tasks
 
-
+#a team-building exercise game you can play, maybe some for decisions, where you have to make clear the decision, goals, problems etc.
 
 #~~indev notes~~
 # an id, name for project
@@ -60,80 +62,99 @@ class rank(Enum):
     admin = 3
     owner = 4
 
+class states(Enum):
+    BACKLOG = 0
+    TODO = 1
+    DOING = 2
+    DONE = 3
+    ARCHIVED = 4
+    
+class priorities(Enum):
+    LOW = 0
+    MEDIUM = 1
+    HIGH = 2
+    CRITICAL = 3
+
 rank_requirements = {
-    #not final. may implement tuples, default requirements instaed.
+    #not final. may implement tuples, for default requirements instaed.
     'addprojectmembers': 3
     #...
 }
 
-class project:
-    def __init__(self, name:str, id:int):
+class Project:
+    def __init__(self, name:str, date, creator_id:int, members = [], tasks = []):
         self.Name:str = name
-        self.Id:int = id
-        self.Members:list(tupple(manage.Client, rank)) = []
+        self.Date = date
+        self.CreatorID:int = creator_id
+        self.Members:list(tuple(manage.Client, rank)) = members
+        self.Tasks:list(Task) = tasks #the ID will be the index in this list
     def AddMembers(self, rank=rank.guest, *members):
         for p in members:
             self.Members.append(p.UserName, rank)
     def printmembers(self):
         for p in self.Members:
             print(p.UserName)    
+    def toJSON(self):
+        return json.dumps(self, default=lambda obj: obj.__dict__,  sort_keys=True, indent = 4)
     def save_project(self, path=None):
         if path == None:
-            path = f"{self.Name}.json"
+            path = f"projects/{creator_id}/{self.Name}.json"
         with open(path, 'w') as file:
-            json.dump(self, file)
-
-    #TBI
-    def load_project(self, path):
-        pass
-
+            json.dump(self, file, default=lambda obj: obj.__dict__, sort_keys=True, indent = 4)
+    def AddTask(self, t):
+        self.Tasks.append(t)
+    def PrintTasks(self, with_id = True):
+        for i in self.Tasks:
+            print(i)
 
 
 class Task:
-    def __init__(self, name, task_priority):
+    def __init__(self, name, date, id, desc, due_date = None, member_config = [], task_priority = 0, updates = [], state = 0):
         self.Name = name
+        self.Date = date
+        self.State = state
+        self.DueDate = due_date
+        self.ID = id
+        self.Desc = desc
+        self.Member_Perms = member_config
         self.TaskPriority = task_priority
-        self.updates = []
+        self.Updates = updates
 
     def add_update(self, update):
-        self.updates.append(update)
+        self.Updates.append(update)
 
     def show_updates(self):
-        pass
-        
+        for i in self.Updates:
+            print(i)
 
-class update:
-    def __init__(self, title: str, content: str, creator: manage.User, notes):
+class Update:
+    def __init__(self, title, date, content, creator_id, notes=[], comments = []):
         self.Title = title
+        self.Date = date
         self.Content = content
-        self.Creator = creator
+        self.CreatorID = creator_id 
         self.Notes = notes
-        self.Comments = []
+        self.Comments = comments
 
-    #incomplete
+class Comment:
+    def __init__(self, title, date, creator_id, content):
+        self.Title = title
+        self.Date = date
+        self.CreatorID = creator_id
+        self.Content = content  
 
-    def write_update_stdscr(self, user):
-        pass
-    def write_update_vim(self, user):
-        pass
-
-#TBI
-class comment:
-
-#TBI
-def actIfPerm():
-    pass
-            
-
-#testing
+#for quick testing
 def main():
-    p1 = project("p1", 1)        
-    u1 = manage.User('michael', 12345)
-    p1.userAddMembers(u1)
-    p1.printmembers()
-    t1 = Task('get gud')
-    t1.add_update(u1)
-    t1.show_updates()
-       
-
-main()
+        rn = datetime.datetime.now
+        p1 = Project("test1", 1, 1)
+        user1 = manage.User('michael', 12345)
+        update1 = Update('test', str(rn()), 'today i tested this method. I then modified this update to see if it would work.', str(user1.ID))
+        p1.AddMembers(user1)
+        p1.printmembers()
+        t1 = Task('get gud', str(rn()))
+        t1.add_update(update1)
+        p1.AddTask(t1)
+        p1.save_project()
+        p2 = Project('', 0, 0)
+        p2.load_project('p1.json')   
+        p2.printmembers()

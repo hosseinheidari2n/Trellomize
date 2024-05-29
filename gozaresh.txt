@@ -1,0 +1,76 @@
+~~~~gozareshe omid (402442252) o hossein (heidari)~~~~
+
+~~kare aazaye team~~
+be tore kholase, hossein karaye account o user ro anjam dad, omid karaye file o edit.
+be tore jozi tar;
+
+
+hossein:
+	password management and encoding functions, initial layout for user creation, 
+	loading user info, 
+	managing ID for users
+	unit tests for his part
+	nice bugless code
+file haye:
+	CSharpCode
+	manage.py
+	testing
+
+
+omid:
+	saving user and project info in json, project management, logging, json deserializing 
+	functions (loading projects, tasks, users, etc from json),
+	managing project members,
+	history for project related actions,
+	final interface layout, system administrator commands, exception handling,
+	structure for project, tasks, comments, updates
+	many bugs, meny debugs
+
+file haye:
+	json_formatting.py
+	project.py
+	terminaltools.py
+	trollo.py
+	tui.py
+	
+
+
+chizaye ezafe i ke zadim:
+hossein:
+	his part in CSharp
+omid:
+	text based user interface with curses library, text editor, efficient options method,
+	updates system (extra functionality)
+	linux easter egg
+
+
+~~moshkelate ravande tosee~~
+chizaye ezafe ziadi ezafe kardim va natije in shod ke tavajohemoon nesbat be ajzaye asali 
+kam she.
+
+~~behtar tarahi shodan, gostaresh, estefade donyaye vaghei~~
+ehtemalan kasayi ke bekhan az hamchin chizi estefade konan ba git, vim va abzar haye moshabeh
+kar mikonan, mitoonim ino be onvane extension baraye yeki az oona bezarim. 
+hamchenin mishe ghabeliataye bishtari baraye tarvije kare timi ezafe kard, mesle mind map, 
+rang, ...
+
+
+~~pishnahad~~
+be nazaram age dafe badi be bache hayi ke in poroje ro zadan begin ke baraye management poroje baad
+bayad az hamin estefade konin jaleb mishe.
+
+
+~~tozihe algorithm~~
+
+hossein az hash estefade kard chon tabe amadash hast va mishe bedoone dastresi be khode 
+password authenticate kard.
+
+hamchenin az file txt baraye zakhire etelaat baraye inke karo javab midad va json baraye in kar ziadi pichide bood.
+
+
+omid az recursive function baraye hazf file haye ye folder, objecte json (dict python) baraye
+save kardan etelaat be khatere sade va rayej boodan json va balad naboodan sql.
+
+
+
+	
