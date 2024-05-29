@@ -10,7 +10,7 @@ class User:
         self.UserName = username
         self.Password = password
         if id == None:
-            self.ID = uuid.uuid1()
+            self.ID = str(uuid.uuid1())
         else:
             self.ID = id
 class Client:
@@ -186,6 +186,15 @@ def CalculateHash(input):
 def SecondCommandList():
     print("1. Create Project")
     print("2. Show Projects")
+    print("Please enter a number between 1 to 2...")
+    n = input()
+    if n == "1":
+       print("ddd")
+    elif n == "2":
+        print("there is no project")
+    else:
+        print("Please enter a number between 1 to 2...")
+        SecondCommandList()
 
 if __name__ == "__main__":
     FirstCommandList()

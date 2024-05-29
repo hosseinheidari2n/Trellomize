@@ -1,4 +1,5 @@
 import curses
+import os
 # import manage
 # import os
 # import tempfile
@@ -84,16 +85,14 @@ class TestDeserializing(unittest.TestCase):
     
 # main()
 
-def main(stdscr):
-    # win = curses.newwin(2, 17, 3, 3)
-    # stdscr.addstr(0, 0, 'hello')
-    # box = Textbox(win)
-    # rectangle(stdscr, 2, 2, 5, 20)
-    # stdscr.refresh()
-    # box.edit()
-    # stdscr.getch()
-    with open('testing/mich .json', 'r') as file:
-        a = json.load(file)
-    print(a)
-wrapper(main)
+def list_files(path):
+    list1 = []
+    print(str(os.walk(path)))
+    for r, useless, files in os.walk(path):
+        print('a')
+        for file in files:
+            list1.append(os.path.join(r, file).replace('\\', '/'))
+    return list1
+
+print(list_files('./testing'))
 # #tab is 9 enter is 10 backspace is 8 delete is 462

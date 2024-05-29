@@ -106,24 +106,14 @@ class Project:
     def PrintTasks(self, with_id = True):
         for i in self.Tasks:
             print(i)
-        
-
-    #TBI
-    def load_project(self, path):
-        with open(path, 'r') as file:
-            pass
-            # data = json.load(file)
-            # for key, value in data.items():
-
 
 
 class Task:
-    #add feature: add deadline and progress
     def __init__(self, name, date, id, desc, due_date = None, member_config = [], task_priority = 0, updates = [], state = 0):
         self.Name = name
         self.Date = date
         self.State = state
-        seld.DueDate = due_date
+        self.DueDate = due_date
         self.ID = id
         self.Desc = desc
         self.Member_Perms = member_config

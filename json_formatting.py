@@ -34,15 +34,23 @@ ClassFieldNames = {
         'txt': 'Content'
     },
     'User': {
-        'username': 'Username',
-        'id': 'UserID',
-        'rank': 'Rank'
+        'username': 'UserName',
+        'password': 'Password',
+        'id': 'ID'
     }
 }
 
+
 def deserialize_dict_user(u1):
-    #stub
-    return u1
+    try:
+        keywords = ClassFieldNames['User']
+        username = u1[keywords['username']]
+        id = u1[keywords['id']]
+        password = u1[keywords['password']]
+    except:
+            raise ValueError(f'user deserialization failed: \n    {u1}')
+    return manage.User(username, password, id)
+        
 
 def deserialize_user_list(l1):
     l_result = []
